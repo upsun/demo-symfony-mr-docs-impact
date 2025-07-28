@@ -58,12 +58,13 @@ documentation-impact-analyzer/
 ### Week 1: Basic Setup and AI Integration
 
 #### Day 1-2: Project Setup
-- [ ] Create new Symfony 7.1 project
-- [ ] Install Symfony AI package
-- [ ] Set up basic folder structure
-- [ ] Configure environment variables
-- [ ] Create `.upsun/config.yaml`
-- [ ] Initialize Git repository
+- [X] Create new Symfony 7.3.x project
+- [] Setup docker-compose for postgresql 17
+- [] Install Symfony AI package
+- [X] Set up basic folder structure
+- [] Configure environment variables
+- [X] Create `.upsun/config.yaml`
+- [X] Initialize Git repository
 
 #### Day 3-4: Webhook Handler
 - [ ] Create `WebhookController` with routes:

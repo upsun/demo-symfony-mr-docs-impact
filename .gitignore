@@ -8,3 +8,25 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+# Environment
+.env.prod
+.env.staging
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Docker
+.docker/

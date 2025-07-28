@@ -4,6 +4,12 @@
 
 You are developing a Documentation Impact Analyzer that uses Symfony AI to analyze merge requests and determine if code changes require user documentation updates. This tool helps maintain documentation quality by automatically flagging changes that impact user-facing features, APIs, or configurations.
 
+## How to start the Symfony server
+
+```
+symfony local:server:start --allow-all-ip
+```
+
 ## Symfony Development Rules and Best Practices
 
 ### 1. Controller Best Practices
