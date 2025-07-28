@@ -59,31 +59,31 @@ documentation-impact-analyzer/
 
 #### Day 1-2: Project Setup
 - [X] Create new Symfony 7.3.x project
-- [] Setup docker-compose for postgresql 17
-- [] Install Symfony AI package
+- [X] Setup docker-compose for postgresql 17
+- [X] Install Symfony AI package
 - [X] Set up basic folder structure
-- [] Configure environment variables
+- [X] Configure environment variables
 - [X] Create `.upsun/config.yaml`
 - [X] Initialize Git repository
 
 #### Day 3-4: Webhook Handler
-- [ ] Create `WebhookController` with routes:
-  - [ ] POST `/webhook/github`
-  - [ ] POST `/webhook/gitlab`
-- [ ] Implement webhook signature validation
-- [ ] Create `MergeRequest` model to hold MR data
-- [ ] Add basic logging for incoming webhooks
-- [ ] Write tests for webhook validation
+- [X] Create `WebhookController` with routes:
+  - [X] POST `/webhook/github`
+  - [X] POST `/webhook/gitlab`
+- [X] Implement webhook signature validation
+- [X] Create `MergeRequest` model to hold MR data
+- [X] Add basic logging for incoming webhooks
+- [X] Write tests for webhook validation
 
 #### Day 5: Git Provider Integration
-- [ ] Create `GitProviderInterface` with methods:
-  - [ ] `fetchMergeRequestDiff()`
-  - [ ] `postComment()`
-  - [ ] `getMergeRequestDetails()`
-- [ ] Implement `GitLabService`
-- [ ] Implement `GitHubService`
-- [ ] Add configuration for API tokens
-- [ ] Test API connections
+- [X] Create `GitProviderInterface` with methods:
+  - [X] `fetchMergeRequestDiff()`
+  - [X] `postComment()`
+  - [X] `getMergeRequestDetails()`
+- [X] Implement `GitLabService`
+- [X] Implement `GitHubService`
+- [X] Add configuration for API tokens
+- [X] Test API connections
 
 ### Week 2: AI Analysis Implementation
 

@@ -134,7 +134,7 @@ class WebhookController extends AbstractController
         }
     }
 
-    private function shouldAnalyze(MergeRequest $mergeRequest): bool
+    private function shouldAnalyze(\App\Model\MergeRequest $mergeRequest): bool
     {
         // Skip drafts, WIP, or closed MRs
         if ($mergeRequest->isDraftOrWip() || $mergeRequest->isClosed()) {
