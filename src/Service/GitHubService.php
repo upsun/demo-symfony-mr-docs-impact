@@ -104,18 +104,44 @@ final readonly class GitHubService implements GitProviderInterface
 
     public function postComment(MergeRequest $mr, DocumentationImpact $impact): void
     {
+        $this->logger->info('Starting postComment process', [
+            'pr_number' => $mr->id,
+            'pr_url' => $mr->url,
+            'impact_level' => $impact->level->value,
+            'should_comment' => $impact->shouldComment(),
+        ]);
+        
         $comment = $this->commentRenderer->renderDocumentationImpact($impact, $mr);
         
+        $this->logger->debug('Comment rendered', [
+            'pr_number' => $mr->id,
+            'comment_length' => strlen($comment),
+        ]);
+        
         $apiUrl = $this->buildCommentApiUrl($mr);
+        
+        $this->logger->info('API URL constructed', [
+            'pr_number' => $mr->id,
+            'api_url' => $apiUrl,
+            'url_valid' => !empty($apiUrl),
+        ]);
         
         if (!$apiUrl) {
             $this->logger->error('Cannot construct comment API URL', [
                 'pr_number' => $mr->id,
+                'mr_url' => $mr->url,
             ]);
             return;
         }
 
         try {
+            $this->logger->info('Making API request to post comment', [
+                'pr_number' => $mr->id,
+                'api_url' => $apiUrl,
+                'has_token' => !empty($this->apiToken),
+                'token_length' => strlen($this->apiToken),
+            ]);
+            
             $response = $this->httpClient->request('POST', $apiUrl, [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->apiToken,
@@ -129,14 +155,19 @@ final readonly class GitHubService implements GitProviderInterface
                 'timeout' => 30,
             ]);
 
-            if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
+            $statusCode = $response->getStatusCode();
+            $responseContent = $response->getContent(false);
+            
+            if ($statusCode >= 200 && $statusCode < 300) {
                 $this->logger->info('Successfully posted comment to GitHub PR', [
                     'pr_number' => $mr->id,
+                    'status_code' => $statusCode,
                 ]);
             } else {
                 $this->logger->error('Failed to post comment to GitHub PR', [
                     'pr_number' => $mr->id,
-                    'status_code' => $response->getStatusCode(),
+                    'status_code' => $statusCode,
+                    'response_body' => $responseContent,
                 ]);
             }
 
@@ -144,6 +175,8 @@ final readonly class GitHubService implements GitProviderInterface
             $this->logger->error('Exception while posting comment to GitHub PR', [
                 'pr_number' => $mr->id,
                 'error' => $e->getMessage(),
+                'error_class' => get_class($e),
+                'trace' => $e->getTraceAsString(),
             ]);
         }
     }

@@ -101,12 +101,27 @@ class WebhookController extends AbstractController
 
             // 6. Post comment if needed
             if ($impact->shouldComment()) {
-                $gitProvider->postComment($mergeRequest, $impact);
-                
-                $this->logger->info('Comment posted', [
+                $this->logger->info('Attempting to post comment', [
                     'provider' => $provider,
                     'mr_id' => $mergeRequest->id,
                     'impact_level' => $impact->level->value,
+                    'mr_url' => $mergeRequest->url,
+                ]);
+                
+                $gitProvider->postComment($mergeRequest, $impact);
+                
+                $this->logger->info('Comment posted successfully', [
+                    'provider' => $provider,
+                    'mr_id' => $mergeRequest->id,
+                    'impact_level' => $impact->level->value,
+                ]);
+            } else {
+                $this->logger->info('Skipping comment - should not comment', [
+                    'provider' => $provider,
+                    'mr_id' => $mergeRequest->id,
+                    'impact_level' => $impact->level->value,
+                    'required' => $impact->required,
+                    'should_comment' => $impact->shouldComment(),
                 ]);
             }
 
