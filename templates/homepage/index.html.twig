@@ -1,0 +1,156 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ project_name }}{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        line-height: 1.6;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: #f8fafc;
+        color: #1a202c;
+    }
+    
+    .readme-content {
+        background: white;
+        padding: 3rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .readme-content h1 {
+        color: #2d3748;
+        border-bottom: 3px solid #4299e1;
+        padding-bottom: 0.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .readme-content h2 {
+        color: #2d3748;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        border-left: 4px solid #4299e1;
+        padding-left: 1rem;
+    }
+    
+    .readme-content h3 {
+        color: #4a5568;
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .readme-content code {
+        background: #edf2f7;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        color: #e53e3e;
+    }
+    
+    .readme-content pre {
+        background: #1a202c;
+        color: #e2e8f0;
+        padding: 1.5rem;
+        border-radius: 8px;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+    }
+    
+    .readme-content pre code {
+        background: transparent;
+        color: inherit;
+        padding: 0;
+    }
+    
+    .readme-content blockquote {
+        border-left: 4px solid #cbd5e0;
+        margin: 1.5rem 0;
+        padding-left: 1.5rem;
+        color: #4a5568;
+        font-style: italic;
+    }
+    
+    .readme-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+    }
+    
+    .readme-content th,
+    .readme-content td {
+        border: 1px solid #e2e8f0;
+        padding: 0.75rem;
+        text-align: left;
+    }
+    
+    .readme-content th {
+        background: #f7fafc;
+        font-weight: 600;
+        color: #2d3748;
+    }
+    
+    .readme-content a {
+        color: #4299e1;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s;
+    }
+    
+    .readme-content a:hover {
+        border-bottom-color: #4299e1;
+    }
+    
+    .readme-content img[alt*="badge"] {
+        margin-right: 0.5rem;
+        vertical-align: baseline;
+    }
+    
+    .readme-content ul,
+    .readme-content ol {
+        margin: 1rem 0;
+        padding-left: 1.5rem;
+    }
+    
+    .readme-content li {
+        margin: 0.5rem 0;
+    }
+    
+    .status-bar {
+        background: #48bb78;
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        text-align: center;
+        font-weight: 600;
+    }
+    
+    .footer {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e2e8f0;
+        text-align: center;
+        color: #718096;
+        font-size: 0.875rem;
+    }
+</style>
+
+<div class="status-bar">
+    🚀 Documentation Impact Analyzer is running and ready to analyze merge requests!
+</div>
+
+<div class="readme-content">
+    {{ readme_content|raw }}
+</div>
+
+<div class="footer">
+    <p>
+        Running on Symfony {{ constant('Symfony\\Component\\HttpKernel\\Kernel::VERSION') }} 
+        | <a href="/health">Health Check</a>
+        | <a href="https://github.com/your-org/documentation-impact-analyzer">Source Code</a>
+    </p>
+</div>
+{% endblock %}

@@ -1,12 +1,17 @@
 {
+    "name": "symfony/documentation-impact-analyzer",
+    "description": "AI-powered tool that analyzes merge requests and automatically determines if code changes require user documentation updates",
     "type": "project",
-    "license": "proprietary",
+    "license": "Apache-2.0",
+    "keywords": ["documentation", "ai", "merge-requests", "analysis", "symfony", "automation"],
+    "homepage": "https://github.com/your-org/documentation-impact-analyzer",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "league/commonmark": "^2.7",
         "symfony/ai-bundle": "dev-main",
         "symfony/console": "7.3.*",
         "symfony/dotenv": "7.3.*",
