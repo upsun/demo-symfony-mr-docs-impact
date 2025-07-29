@@ -16,6 +16,7 @@ final readonly class GitLabService implements GitProviderInterface
         private string $apiToken,
         private string $webhookSecret,
         private LoggerInterface $logger,
+        private CommentRenderer $commentRenderer,
     ) {}
 
     public function validateWebhook(Request $request): bool
@@ -105,7 +106,7 @@ final readonly class GitLabService implements GitProviderInterface
 
     public function postComment(MergeRequest $mr, DocumentationImpact $impact): void
     {
-        $comment = $this->formatComment($impact);
+        $comment = $this->commentRenderer->renderDocumentationImpact($impact, $mr);
         
         // Extract project ID and MR IID from the diff URL or construct API URL
         $apiUrl = $this->buildCommentApiUrl($mr);
@@ -223,42 +224,4 @@ final readonly class GitLabService implements GitProviderInterface
         return $diff;
     }
 
-    private function formatComment(DocumentationImpact $impact): string
-    {
-        $emoji = $impact->level->getEmoji();
-        $level = $impact->level->getDisplayName();
-        
-        $comment = "## {$emoji} Documentation Impact Analysis\n\n";
-        $comment .= "**Impact Level:** {$level}\n";
-        $comment .= "**Documentation Required:** " . ($impact->required ? 'Yes' : 'No') . "\n\n";
-
-        if (!empty($impact->impactedAreas)) {
-            $comment .= "**Impacted Areas:**\n";
-            foreach ($impact->impactedAreas as $area) {
-                $comment .= "- " . ucfirst(str_replace('_', ' ', $area)) . "\n";
-            }
-            $comment .= "\n";
-        }
-
-        if (!empty($impact->reasons)) {
-            $comment .= "**Reasons:**\n";
-            foreach ($impact->reasons as $reason) {
-                $comment .= "- {$reason}\n";
-            }
-            $comment .= "\n";
-        }
-
-        if (!empty($impact->suggestions)) {
-            $comment .= "**Suggestions:**\n";
-            foreach ($impact->suggestions as $suggestion) {
-                $comment .= "- {$suggestion}\n";
-            }
-            $comment .= "\n";
-        }
-
-        $comment .= "---\n";
-        $comment .= "*This analysis was generated automatically by the Documentation Impact Analyzer.*";
-
-        return $comment;
-    }
 }

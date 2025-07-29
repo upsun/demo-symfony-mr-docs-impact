@@ -1,0 +1,38 @@
+## {{ impact.level.emoji }} Documentation Impact Analysis
+
+**Impact Level:** {{ impact.level.displayName }}  
+**Documentation Required:** {{ impact.required ? 'Yes' : 'No' }}
+
+{% if impact.impactedAreas is not empty %}
+### 📋 Impacted Areas
+{% for area in impact.impactedAreas %}
+- {{ area|replace({'_': ' '})|title }}
+{% endfor %}
+
+{% endif %}
+{% if impact.reasons is not empty %}
+### 🔍 Analysis Results
+{% for reason in impact.reasons %}
+- {{ reason }}
+{% endfor %}
+
+{% endif %}
+{% if impact.suggestions is not empty %}
+### 💡 Documentation Suggestions
+{% for suggestion in impact.suggestions %}
+{% if suggestion starts with '```' or '`' in suggestion %}
+{{ suggestion|raw }}
+{% else %}
+- {{ suggestion }}
+{% endif %}
+{% endfor %}
+
+{% endif %}
+{% if impact.level.value in ['high', 'critical'] %}
+### ⚠️ Action Required
+This change has **{{ impact.level.displayName|lower }}** documentation impact. Please prioritize updating the documentation before merging.
+
+{% endif %}
+---
+*🤖 This analysis was generated automatically by the Documentation Impact Analyzer.*  
+*Questions about this analysis? Check the [documentation guidelines]({{ documentation_guidelines_url|default('#') }}) or contact the documentation team.*

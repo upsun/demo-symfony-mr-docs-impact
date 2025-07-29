@@ -2,28 +2,40 @@
 
 namespace App\Tests\Service;
 
+use App\Service\CommentRenderer;
 use App\Service\GitLabService;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 class GitLabServiceTest extends TestCase
 {
     private GitLabService $service;
     private HttpClientInterface $httpClient;
     private LoggerInterface $logger;
+    private CommentRenderer $commentRenderer;
 
     protected function setUp(): void
     {
         $this->httpClient = $this->createMock(HttpClientInterface::class);
         $this->logger = $this->createMock(LoggerInterface::class);
         
+        // Create a real CommentRenderer with minimal Twig setup
+        $loader = new ArrayLoader([
+            'comment/documentation_impact.md.twig' => 'Test comment template'
+        ]);
+        $twig = new Environment($loader);
+        $this->commentRenderer = new CommentRenderer($twig);
+        
         $this->service = new GitLabService(
             $this->httpClient,
             'test-token',
             'test-secret',
-            $this->logger
+            $this->logger,
+            $this->commentRenderer
         );
     }
 

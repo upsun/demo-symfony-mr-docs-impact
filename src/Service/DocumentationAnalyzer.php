@@ -143,12 +143,66 @@ final readonly class DocumentationAnalyzer
             $impactLevel = ImpactLevel::MEDIUM;
         }
 
+        // Format suggestions with better markdown and code examples
+        $suggestions = $this->formatSuggestions($data['suggestions'] ?? []);
+
         return new DocumentationImpact(
             level: $impactLevel,
             required: (bool) $data['requires_documentation'],
             impactedAreas: $data['impacted_areas'] ?? [],
             reasons: $data['reasons'] ?? [],
-            suggestions: $data['suggestions'] ?? [],
+            suggestions: $suggestions,
         );
+    }
+
+    private function formatSuggestions(array $suggestions): array
+    {
+        return array_map(function ($suggestion) {
+            // Enhanced formatting for API endpoints
+            $suggestion = $this->formatApiReferences($suggestion);
+            
+            // Enhanced formatting for code examples
+            $suggestion = $this->formatCodeExamples($suggestion);
+            
+            // Enhanced formatting for configuration examples
+            $suggestion = $this->formatConfigExamples($suggestion);
+            
+            return $suggestion;
+        }, $suggestions);
+    }
+
+    private function formatApiReferences(string $suggestion): string
+    {
+        // Format API endpoint references
+        $suggestion = preg_replace(
+            '/\b(GET|POST|PUT|DELETE|PATCH)\s+(\/[^\s]+)/',
+            '**$1** `$2`',
+            $suggestion
+        );
+
+        return $suggestion;
+    }
+
+    private function formatCodeExamples(string $suggestion): string
+    {
+        // If suggestion contains code-like patterns, wrap them in code blocks
+        if (preg_match('/(\$\w+|\w+\([^)]*\)|class\s+\w+|function\s+\w+)/', $suggestion)) {
+            // Look for inline code patterns and wrap them
+            $suggestion = preg_replace('/(\$\w+)/', '`$1`', $suggestion);
+            $suggestion = preg_replace('/(\w+\([^)]*\))/', '`$1`', $suggestion);
+        }
+
+        return $suggestion;
+    }
+
+    private function formatConfigExamples(string $suggestion): string
+    {
+        // Format environment variables
+        $suggestion = preg_replace('/\b([A-Z_]+=[^\s]+)/', '`$1`', $suggestion);
+        
+        // Format configuration keys
+        $suggestion = preg_replace('/(\w+\.\w+(\.\w+)*)/', '`$1`', $suggestion);
+
+        return $suggestion;
     }
 }
