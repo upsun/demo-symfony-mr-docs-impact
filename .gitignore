@@ -16,8 +16,8 @@
 ###< phpunit/phpunit ###
 
 # Environment
-.env.prod
-.env.staging
+.env.*
+!.env.example
 
 # IDE
 .vscode/
