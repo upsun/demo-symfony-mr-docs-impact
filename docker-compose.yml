@@ -1,15 +1,4 @@
 services:
-  database:
-    image: postgres:17-alpine
-    environment:
-      POSTGRES_DB: mr_docs_impact
-      POSTGRES_USER: symfony
-      POSTGRES_PASSWORD: symfony
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
   php:
     build:
       context: .
@@ -18,11 +7,4 @@ services:
       - "8000:8000"
     volumes:
       - .:/var/www/html
-    depends_on:
-      - database
-    environment:
-      DATABASE_URL: postgresql://symfony:symfony@database:5432/mr_docs_impact
     command: symfony local:server:start --allow-all-ip --port=8000
-
-volumes:
-  postgres_data:

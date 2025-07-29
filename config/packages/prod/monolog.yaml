@@ -1,13 +1,12 @@
 # config/packages/prod/monolog.yaml
 monolog:
     handlers:
-        # this "file_log" key could be anything
-        file_log:
+        nested:
             type: stream
-            # log to var/log/(environment).log
-            path: "%kernel.logs_dir%/%kernel.environment%.log"
-            # log *all* messages (debug is lowest level)
+            path: php://stderr
             level: debug
+        buffer:
+            type: buffer
 
         syslog_handler:
             type: syslog
