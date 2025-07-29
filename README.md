@@ -46,8 +46,8 @@ An AI-powered tool that analyzes merge requests and automatically determines if 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-org/documentation-impact-analyzer.git
-   cd documentation-impact-analyzer
+   git clone https://github.com/upsun/demo-symfony-mr-docs-impact.git
+   cd demo-symfony-mr-docs-impact
    ```
 
 2. **Install dependencies**
@@ -345,10 +345,9 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 ## 📞 Support
 
-- 📧 Email: support@your-organization.com
-- 🐛 Issues: [GitHub Issues](https://github.com/your-org/documentation-impact-analyzer/issues)
-- 📖 Documentation: [Project Wiki](https://github.com/your-org/documentation-impact-analyzer/wiki)
-- 💬 Discussions: [GitHub Discussions](https://github.com/your-org/documentation-impact-analyzer/discussions)
+- 🐛 Issues: [GitHub Issues](https://github.com/upsun/demo-symfony-mr-docs-impact/issues)
+- 📖 Documentation: [Project Wiki](https://github.com/upsun/demo-symfony-mr-docs-impact/wiki)
+- 💬 Discussions: [GitHub Discussions](https://github.com/upsun/demo-symfony-mr-docs-impact/discussions)
 
 ---
 

@@ -4,7 +4,7 @@
     "type": "project",
     "license": "Apache-2.0",
     "keywords": ["documentation", "ai", "merge-requests", "analysis", "symfony", "automation"],
-    "homepage": "https://github.com/your-org/documentation-impact-analyzer",
+    "homepage": "https://github.com/upsun/demo-symfony-mr-docs-impact",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {

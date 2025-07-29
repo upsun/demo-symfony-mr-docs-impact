@@ -1,0 +1,48 @@
+applications:
+  documentation-impact-analyzer:
+    type: php:8.3
+
+    build:
+      flavor: none
+
+    hooks:
+      build: |
+        set -xe
+        composer install --no-progress --no-interaction --optimize-autoloader --no-dev
+      deploy: |
+        set -xe
+        php bin/console doctrine:migrations:migrate --no-interaction
+
+    web:
+      locations:
+        /:
+          root: public
+          passthru: /index.php
+          expires: 5m
+
+    runtime:
+      extensions:
+        - pdo_pgsql
+        - zip
+
+    relationships:
+      database: {}
+
+    mounts:
+      var/cache:
+        source: tmp
+      var/log:
+        source: storage
+
+    variables:
+      php:
+        opcache.preload: config/preload.php
+
+services:
+  database:
+    type: postgresql:17
+
+routes:
+  "https://{default}/":
+    type: upstream
+    upstream: documentation-impact-analyzer:http
