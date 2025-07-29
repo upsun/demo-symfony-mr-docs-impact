@@ -159,17 +159,48 @@ final readonly class GitLabService implements GitProviderInterface
     private function extractChangedFiles(array $payload): array
     {
         // GitLab webhook doesn't always include changed files in the payload
-        // We'll extract them from the changes if available
-        $changes = $payload['changes'] ?? [];
-        $files = [];
-
-        // Look for file changes in the payload
-        if (isset($changes['updated_at'])) {
-            // This is an update event, we'd need to fetch the diff to get file list
-            // For now, return empty array and rely on the diff fetching
+        // We'll extract them from the changes if available, or fetch from API
+        $project = $payload['project'] ?? [];
+        $mr = $payload['object_attributes'] ?? [];
+        
+        $projectId = $project['id'] ?? null;
+        $mrIid = $mr['iid'] ?? null;
+        
+        if (!$projectId || !$mrIid) {
+            $this->logger->warning('Cannot extract changed files - missing project or MR info');
+            return ['unknown']; // Return non-empty array to allow analysis
         }
 
-        return $files;
+        try {
+            $baseUrl = rtrim($project['web_url'] ?? 'https://gitlab.com', '/');
+            $baseUrl = preg_replace('/\/[^\/]+\/[^\/]+$/', '', $baseUrl);
+            
+            $response = $this->httpClient->request('GET', "{$baseUrl}/api/v4/projects/{$projectId}/merge_requests/{$mrIid}/changes", [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->apiToken,
+                    'Content-Type' => 'application/json',
+                ],
+                'timeout' => 10,
+            ]);
+
+            $data = json_decode($response->getContent(), true);
+            
+            if (!isset($data['changes']) || !is_array($data['changes'])) {
+                return ['unknown'];
+            }
+            
+            return array_map(fn($change) => $change['new_path'] ?? $change['old_path'] ?? 'unknown', $data['changes']);
+            
+        } catch (\Exception $e) {
+            $this->logger->warning('Failed to fetch changed files from GitLab API', [
+                'project_id' => $projectId,
+                'mr_iid' => $mrIid,
+                'error' => $e->getMessage(),
+            ]);
+            
+            // Return non-empty array to allow analysis to proceed
+            return ['unknown'];
+        }
     }
 
     private function buildDiffApiUrl(array $project, array $mrData): ?string

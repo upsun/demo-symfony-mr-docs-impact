@@ -158,9 +158,43 @@ final readonly class GitHubService implements GitProviderInterface
     private function extractChangedFiles(array $pr): array
     {
         // GitHub PR webhook includes changed files count but not the file list
-        // We would need to make an additional API call to get the files
-        // For now, return empty array and rely on diff parsing
-        return [];
+        // We need to make an additional API call to get the files
+        $repository = $pr['base']['repo'] ?? [];
+        $repoFullName = $repository['full_name'] ?? null;
+        $prNumber = $pr['number'] ?? null;
+        
+        if (!$repoFullName || !$prNumber) {
+            $this->logger->warning('Cannot extract changed files - missing repo or PR info');
+            return ['unknown']; // Return non-empty array to allow analysis
+        }
+
+        try {
+            $response = $this->httpClient->request('GET', "https://api.github.com/repos/{$repoFullName}/pulls/{$prNumber}/files", [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->apiToken,
+                    'Accept' => 'application/vnd.github.v3+json',
+                    'User-Agent' => 'Documentation-Impact-Analyzer/1.0',
+                ],
+                'timeout' => 10,
+            ]);
+
+            $files = json_decode($response->getContent(), true);
+            
+            if (!is_array($files)) {
+                return ['unknown'];
+            }
+            
+            return array_map(fn($file) => $file['filename'] ?? 'unknown', $files);
+            
+        } catch (\Exception $e) {
+            $this->logger->warning('Failed to fetch changed files from GitHub API', [
+                'pr_number' => $prNumber,
+                'error' => $e->getMessage(),
+            ]);
+            
+            // Return non-empty array to allow analysis to proceed
+            return ['unknown'];
+        }
     }
 
     private function mapPrState(array $pr): string
