@@ -15,7 +15,7 @@ final readonly class DocumentationAnalyzer
         private AnalysisPromptBuilder $promptBuilder,
         private LoggerInterface $logger,
         private HttpClientInterface $httpClient,
-        private string $openaiApiKey,
+        private string $anthropicApiKey,
         private int $maxDiffSize = 50000,
     ) {}
 
@@ -47,8 +47,8 @@ final readonly class DocumentationAnalyzer
             // Build the prompt
             $prompt = $this->promptBuilder->build($mr, $sanitizedDiff);
 
-            // Call OpenAI API
-            $response = $this->callOpenAI($prompt);
+            // Call Claude API
+            $response = $this->callClaude($prompt);
 
             // Parse and return the response
             $impact = $this->parseResponse($response);
@@ -93,38 +93,43 @@ final readonly class DocumentationAnalyzer
         return trim($diff);
     }
 
-    private function callOpenAI(string $prompt): array
+    private function callClaude(string $prompt): array
     {
-        $response = $this->httpClient->request('POST', 'https://api.openai.com/v1/chat/completions', [
+        $response = $this->httpClient->request('POST', 'https://api.anthropic.com/v1/messages', [
             'headers' => [
-                'Authorization' => 'Bearer ' . $this->openaiApiKey,
+                'x-api-key' => $this->anthropicApiKey,
                 'Content-Type' => 'application/json',
+                'anthropic-version' => '2023-06-01',
             ],
             'json' => [
-                'model' => 'gpt-4o-mini',
+                'model' => 'claude-3-5-sonnet-20241022',
+                'max_tokens' => 4096,
+                'system' => 'You are a documentation expert analyzing code changes to determine if user documentation needs to be updated. Always respond with valid JSON only, no other text.',
                 'messages' => [
                     [
-                        'role' => 'system',
-                        'content' => 'You are a documentation expert analyzing code changes to determine if user documentation needs to be updated. Always respond with valid JSON.',
-                    ],
-                    [
                         'role' => 'user',
-                        'content' => $prompt,
+                        'content' => $prompt . "\n\nPlease respond with a JSON object containing the required fields: requires_documentation, impact_level, impacted_areas, reasons, and suggestions.",
                     ],
                 ],
                 'temperature' => 0.3,
-                'response_format' => ['type' => 'json_object'],
             ],
             'timeout' => 60,
         ]);
 
         $data = $response->toArray();
 
-        if (!isset($data['choices'][0]['message']['content'])) {
-            throw new \RuntimeException('Invalid OpenAI API response structure');
+        if (!isset($data['content'][0]['text'])) {
+            throw new \RuntimeException('Invalid Claude API response structure');
         }
 
-        return json_decode($data['choices'][0]['message']['content'], true, 512, JSON_THROW_ON_ERROR);
+        $content = $data['content'][0]['text'];
+        
+        // Extract JSON from the response if it contains other text
+        if (preg_match('/\{.*\}/s', $content, $matches)) {
+            $content = $matches[0];
+        }
+
+        return json_decode($content, true, 512, JSON_THROW_ON_ERROR);
     }
 
     private function parseResponse(array $data): DocumentationImpact

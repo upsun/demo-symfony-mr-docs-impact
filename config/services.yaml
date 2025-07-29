@@ -34,7 +34,7 @@ services:
     # Documentation analyzer
     App\Service\DocumentationAnalyzer:
         arguments:
-            $openaiApiKey: '%env(OPENAI_API_KEY)%'
+            $anthropicApiKey: '%env(ANTHROPIC_API_KEY)%'
             $maxDiffSize: '%app.max_diff_size%'
 
     # Alias for GitLab provider

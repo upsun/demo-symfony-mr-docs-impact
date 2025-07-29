@@ -9,7 +9,7 @@ An AI-powered tool that analyzes merge requests and automatically determines if 
 ## ✨ Features
 
 ### 🤖 Intelligent Analysis
-- **AI-Powered Detection**: Uses GPT-4o-mini to analyze code changes and determine documentation impact
+- **AI-Powered Detection**: Uses Claude 3.5 Sonnet to analyze code changes and determine documentation impact
 - **File-Type Awareness**: Intelligent categorization of changed files (controllers, models, config, templates, etc.)
 - **Context-Aware Prompts**: Tailored analysis based on the type of changes detected
 - **Multi-Level Impact**: Categorizes changes from NONE to CRITICAL impact levels
@@ -39,7 +39,7 @@ An AI-powered tool that analyzes merge requests and automatically determines if 
 - PHP 8.3 or higher
 - Composer
 - PostgreSQL 17
-- OpenAI API key
+- Anthropic API key
 - Git provider tokens (GitHub/GitLab)
 
 ### Installation
@@ -72,7 +72,7 @@ An AI-powered tool that analyzes merge requests and automatically determines if 
    GITLAB_WEBHOOK_SECRET=your-webhook-secret
    
    # AI Configuration
-   OPENAI_API_KEY=your-openai-api-key
+   ANTHROPIC_API_KEY=your-anthropic-api-key
    ```
 
 4. **Set up database**
@@ -121,14 +121,14 @@ This starts:
 
 ### AI Configuration
 
-The system uses OpenAI's GPT-4o-mini model for cost-effective analysis. You can customize:
+The system uses Anthropic's Claude 3.5 Sonnet model for intelligent analysis. You can customize:
 
 ```yaml
 # config/packages/ai.yaml
 ai:
     platform:
-        openai:
-            api_key: '%env(OPENAI_API_KEY)%'
+        anthropic:
+            api_key: '%env(ANTHROPIC_API_KEY)%'
 ```
 
 ## 📊 How It Works
@@ -269,7 +269,7 @@ Set these in your production environment:
 APP_ENV=prod
 APP_SECRET=your-production-secret
 DATABASE_URL=your-production-db-url
-OPENAI_API_KEY=your-openai-key
+ANTHROPIC_API_KEY=your-anthropic-key
 GITHUB_TOKEN=your-github-token
 GITHUB_WEBHOOK_SECRET=your-webhook-secret
 GITLAB_TOKEN=your-gitlab-token
@@ -278,12 +278,12 @@ GITLAB_WEBHOOK_SECRET=your-webhook-secret
 
 ## 💰 Cost Analysis
 
-### OpenAI API Costs
-Using GPT-4o-mini for cost-effective analysis:
-- **Average cost per analysis**: < $0.05
-- **Typical MR (1000 lines)**: ~$0.02
-- **Large MR (5000 lines)**: ~$0.08
-- **Monthly cost (100 MRs)**: ~$2-5
+### Anthropic API Costs
+Using Claude 3.5 Sonnet for intelligent analysis:
+- **Average cost per analysis**: < $0.10
+- **Typical MR (1000 lines)**: ~$0.05
+- **Large MR (5000 lines)**: ~$0.15
+- **Monthly cost (100 MRs)**: ~$5-10
 
 ### Performance Metrics
 - **Analysis time**: < 30 seconds per MR
@@ -339,7 +339,7 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 ## 🙏 Acknowledgments
 
 - [Symfony](https://symfony.com/) - The PHP framework for this project
-- [OpenAI](https://openai.com/) - AI analysis capabilities
+- [Anthropic](https://anthropic.com/) - AI analysis capabilities with Claude
 - [Twig](https://twig.symfony.com/) - Template rendering
 - [PHPUnit](https://phpunit.de/) - Testing framework
 

@@ -133,14 +133,14 @@ services:
 ```yaml
 ai:
     platform:
-        openai:
-            api_key: '%env(OPENAI_API_KEY)%'
+        anthropic:
+            api_key: '%env(ANTHROPIC_API_KEY)%'
     
     chains:
         documentation_analyzer:
             model:
-                provider: 'openai'
-                name: 'gpt-4o-mini'
+                provider: 'anthropic'
+                name: 'claude-3-5-sonnet-20241022'
                 temperature: 0.3
                 response_format:
                     type: 'json_object'
@@ -306,7 +306,7 @@ class WebhookControllerTest extends WebTestCase
 #### Always use environment variables for sensitive data
 ```bash
 # .env.local (never commit this)
-OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
 GITLAB_TOKEN=glpat-...
 GITLAB_WEBHOOK_SECRET=...
 ```
@@ -316,8 +316,8 @@ GITLAB_WEBHOOK_SECRET=...
 # config/packages/ai.yaml
 ai:
     platform:
-        openai:
-            api_key: '%env(OPENAI_API_KEY)%'
+        anthropic:
+            api_key: '%env(ANTHROPIC_API_KEY)%'
 ```
 
 ### 9. Logging Best Practices

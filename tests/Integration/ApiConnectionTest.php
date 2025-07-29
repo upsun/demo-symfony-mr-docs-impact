@@ -12,21 +12,19 @@ use App\Prompt\AnalysisPromptBuilder;
 
 class ApiConnectionTest extends TestCase
 {
-    public function testOpenAiApiConnection(): void
+    public function testClaudeApiConnection(): void
     {
-        // Mock successful OpenAI response
+        // Mock successful Claude response
         $mockResponse = new MockResponse(json_encode([
-            'choices' => [
+            'content' => [
                 [
-                    'message' => [
-                        'content' => json_encode([
-                            'requires_documentation' => false,
-                            'impact_level' => 'none',
-                            'impacted_areas' => [],
-                            'reasons' => ['Internal refactoring only'],
-                            'suggestions' => []
-                        ])
-                    ]
+                    'text' => json_encode([
+                        'requires_documentation' => false,
+                        'impact_level' => 'none',
+                        'impacted_areas' => [],
+                        'reasons' => ['Internal refactoring only'],
+                        'suggestions' => []
+                    ])
                 ]
             ]
         ]));

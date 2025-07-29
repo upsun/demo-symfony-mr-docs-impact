@@ -31,21 +31,19 @@ class DocumentationAnalyzerTest extends TestCase
     public function testAnalyzeApiEndpointAddition(): void
     {
         $mockResponse = new MockResponse(json_encode([
-            'choices' => [
+            'content' => [
                 [
-                    'message' => [
-                        'content' => json_encode([
-                            'requires_documentation' => true,
-                            'impact_level' => 'high',
-                            'impacted_areas' => ['api_docs'],
-                            'reasons' => ['New API endpoint added'],
-                            'suggestions' => [
-                                'Document the new POST /api/users endpoint',
-                                'Add authentication examples with TOKEN=abc123',
-                                'Include response format in API reference'
-                            ]
-                        ])
-                    ]
+                    'text' => json_encode([
+                        'requires_documentation' => true,
+                        'impact_level' => 'high',
+                        'impacted_areas' => ['api_docs'],
+                        'reasons' => ['New API endpoint added'],
+                        'suggestions' => [
+                            'Document the new POST /api/users endpoint',
+                            'Add authentication examples with TOKEN=abc123',
+                            'Include response format in API reference'
+                        ]
+                    ])
                 ]
             ]
         ]));
@@ -94,17 +92,15 @@ class DocumentationAnalyzerTest extends TestCase
     public function testAnalyzeInternalRefactoring(): void
     {
         $mockResponse = new MockResponse(json_encode([
-            'choices' => [
+            'content' => [
                 [
-                    'message' => [
-                        'content' => json_encode([
-                            'requires_documentation' => false,
-                            'impact_level' => 'none',
-                            'impacted_areas' => [],
-                            'reasons' => ['Internal refactoring with no user impact'],
-                            'suggestions' => []
-                        ])
-                    ]
+                    'text' => json_encode([
+                        'requires_documentation' => false,
+                        'impact_level' => 'none',
+                        'impacted_areas' => [],
+                        'reasons' => ['Internal refactoring with no user impact'],
+                        'suggestions' => []
+                    ])
                 ]
             ]
         ]));
@@ -145,20 +141,18 @@ class DocumentationAnalyzerTest extends TestCase
     public function testAnalyzeConfigurationChange(): void
     {
         $mockResponse = new MockResponse(json_encode([
-            'choices' => [
+            'content' => [
                 [
-                    'message' => [
-                        'content' => json_encode([
-                            'requires_documentation' => true,
-                            'impact_level' => 'medium',
-                            'impacted_areas' => ['configuration'],
-                            'reasons' => ['New environment variable added'],
-                            'suggestions' => [
-                                'Document FEATURE_FLAG=true environment variable',
-                                'Update deployment configuration guide'
-                            ]
-                        ])
-                    ]
+                    'text' => json_encode([
+                        'requires_documentation' => true,
+                        'impact_level' => 'medium',
+                        'impacted_areas' => ['configuration'],
+                        'reasons' => ['New environment variable added'],
+                        'suggestions' => [
+                            'Document FEATURE_FLAG=true environment variable',
+                            'Update deployment configuration guide'
+                        ]
+                    ])
                 ]
             ]
         ]));
